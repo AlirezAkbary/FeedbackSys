@@ -12,7 +12,7 @@ def professor_view(request, id):
     context = {
         "object" : obj
     }
-    return render(request, "professor/ProfessorCourseView.html", context)
+    return render(request, "professor/New_HomeProfPage.html", context)
 
 
 # @login_required

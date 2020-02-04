@@ -23,8 +23,8 @@ from User.views import signup, user_login, user_logout
 from Student.views import student_view
 from Professor.views import professor_view
 from . import settings
-from Course.views import AddCourse, SearchCourse, joinCourse, courseHome
-
+from Course.views import *
+from Question.views import QuestionView
 def home_view(request):
     return render(request, "index.html", {})
 
@@ -41,6 +41,10 @@ urlpatterns = [
     path('professor/<int:id>', professor_view, name='professor'),
     path('CourseForm/', AddCourse, name='addcourseform'),
     path('Course/<int:cid>/<int:gid>', courseHome,name="courseHome"),
+
+    path('Course/<int:cid>/<int:gid>/AddMultChoiceQ', AddMultipleChoiceQuestion, name='MultChoiceQ'),
+
+    path('Course/<int:cid>/<int:gid>/Question/<int:qid>', QuestionView),
     url(r'^logout/$', user_logout, name='logout')
 ]
 

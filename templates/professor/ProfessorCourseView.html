@@ -1,73 +1,152 @@
-{% extends "professor/baseProfPage.html" %}
+{% extends "professor/New_baseProfPage.html" %}
 {% load static %}
 
-{% block content %}
-
-
-
-        <div class="sidebar" data-color="orange">
+{% block menu %}
+        <div class="sidebar" data-color="black">
             <!--
         Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
     -->
             <div class="logo">
-                <a href="http://www.creative-tim.com" class="simple-text logo-mini">
-                    CT
+
+                <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="now-ui-icons ui-1_simple-add"></i>
+                    <p>
+                        New Question
+                    </p>
                 </a>
-                <a href="http://www.creative-tim.com" class="simple-text logo-normal">
-                    Creative Tim
-                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="{{request.path}}/AddMultChoiceQ">Multiple Choice</a>
+                    <a class="dropdown-item" href="#">Feeback</a>
+                    <a class="dropdown-item" href="#">Default Question</a>
+
+                </div>
+
+
+                <form>
+                    <div class="input-group no-border">
+                        <input type="text" value="" class="form-control" placeholder="Search Questions...">
+                            <span class="input-group-addon">
+                                <i class="now-ui-icons ui-1_zoom-bold"></i>
+                            </span>
+                    </div>
+                </form>
+
             </div>
+
             <div class="sidebar-wrapper">
                 <ul class="nav">
                     <li class="active">
-                        <a href="../examples/dashboard.html">
-                            <i class="now-ui-icons design_app"></i>
-                            <p>Dashboard</p>
+                        <a href="/Course/{{cid}}/{{gid}}">
+                            <i class="now-ui-icons arrows-1_minimal-down"></i>
+                            <h3>Questions</h3>
                         </a>
                     </li>
+                    {% for i in questions %}
                     <li>
-                        <a href="../examples/icons.html">
-                            <i class="now-ui-icons education_atom"></i>
-                            <p>Icons</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="../examples/map.html">
-                            <i class="now-ui-icons location_map-big"></i>
-                            <p>Maps</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="../notifications.html">
-                            <i class="now-ui-icons ui-1_bell-53"></i>
-                            <p>Notifications</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="../examples/user.html">
-                            <i class="now-ui-icons users_single-02"></i>
-                            <p>User Profile</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="../examples/tables.html">
+                        <a href="/Course/{{cid}}/{{gid}}/Question/{{i.id}}">
                             <i class="now-ui-icons design_bullet-list-67"></i>
-                            <p>Table List</p>
+                            <p>{{i.title}}</p>
                         </a>
                     </li>
-                    <li>
-                        <a href="../examples/typography.html">
-                            <i class="now-ui-icons text_caps-small"></i>
-                            <p>Typography</p>
-                        </a>
-                    </li>
-                    <li class="active-pro">
-                        <a href="../examples/upgrade.html">
-                            <i class="now-ui-icons arrows-1_cloud-download-93"></i>
-                            <p>Upgrade to PRO</p>
-                        </a>
-                    </li>
+                    {% endfor %}
+
                 </ul>
             </div>
         </div>
+{% endblock %}
+
+{% block title %}
+<a class="navbar-brand" href="#pablo">{{ course.Name }}</a>
+<a class="navbar-brand" href="#pablo">{{ course.CourseID }}-{{course.GroupID}}</a>
+{% endblock %}
+
+{% block body%}
+
+<div class="content">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="title">Edit Profile</h5>
+                            </div>
+                            <div class="card-body">
+                                <form>
+                                    <div class="row">
+                                        <div class="col-md-5 pr-1">
+                                            <div class="form-group">
+                                                <label>Company (disabled)</label>
+                                                <input type="text" class="form-control" disabled="" placeholder="Company" value="Creative Code Inc.">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 px-1">
+                                            <div class="form-group">
+                                                <label>Username</label>
+                                                <input type="text" class="form-control" placeholder="Username" value="michael23">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 pl-1">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Email address</label>
+                                                <input type="email" class="form-control" placeholder="Email">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 pr-1">
+                                            <div class="form-group">
+                                                <label>First Name</label>
+                                                <input type="text" class="form-control" placeholder="Company" value="Mike">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 pl-1">
+                                            <div class="form-group">
+                                                <label>Last Name</label>
+                                                <input type="text" class="form-control" placeholder="Last Name" value="Andrew">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Address</label>
+                                                <input type="text" class="form-control" placeholder="Home Address" value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4 pr-1">
+                                            <div class="form-group">
+                                                <label>City</label>
+                                                <input type="text" class="form-control" placeholder="City" value="Mike">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 px-1">
+                                            <div class="form-group">
+                                                <label>Country</label>
+                                                <input type="text" class="form-control" placeholder="Country" value="Andrew">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 pl-1">
+                                            <div class="form-group">
+                                                <label>Postal Code</label>
+                                                <input type="number" class="form-control" placeholder="ZIP Code">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>About Me</label>
+                                                <textarea rows="4" cols="80" class="form-control" placeholder="Here can be your description" value="Mike">Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo.</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
 {% endblock %}

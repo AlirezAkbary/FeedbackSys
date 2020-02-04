@@ -10,6 +10,8 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.db.models import Q
+from Question.forms import MultipleChoiceForm
+from Question.models import MultipleChoiceQuestion, Question, Choice
 
 @login_required
 def AddCourse(request):
@@ -100,13 +102,46 @@ def joinCourse(request, id, group):
 
 @login_required
 def courseHome(request, cid, gid):
+    print(request.user.username)
     if Professor.objects.get(ProfID=int(request.user.username)) != None:
         return courseHomeProfView(request, cid, gid)
     return courseHomeStudentView(request, cid, gid)
 
 
 def courseHomeProfView(request, cid, gid):
-    return render(request, 'professor/ProfessorCourseView.html', {})
+    the_course = Course.objects.get(CourseID=cid, GroupID=gid)
+    context = {}
+    context['course'] = the_course
+    questions = Question.objects.all()
+    context['questions'], context['cid'], context['gid'] = questions, cid, gid
+    return render(request, 'professor/ProfessorCourseView.html', context)
 
 def courseHomeStudentView(request, cid, gid):
     pass
+
+
+def AddMultipleChoiceQuestion(request, cid, gid):
+    if request.method == "POST":
+        print("------------------------------------------------")
+        print(dict(request.POST.lists()))
+
+
+        post_dict = dict(request.POST.lists())
+
+        created_question = MultipleChoiceQuestion(title=post_dict['title'][0])
+        created_question.save()
+        created_question.q_type = 'M'
+
+        choices = post_dict['new']
+        for i in choices:
+            if i != '':
+                created_choice = Choice(text=i, question=created_question)
+                created_choice.save()
+
+        the_course = Course.objects.get(CourseID=cid, GroupID=gid)
+        the_course.Questions.add(created_question)
+        return HttpResponseRedirect(reverse('MultChoiceQ', kwargs={'cid':cid, 'gid':gid}))
+    else:
+        question_form = MultipleChoiceForm()
+    the_course = Course.objects.get(CourseID=cid, GroupID=gid)
+    return render(request, 'course/AddMultChoiceQ.html', {'question_form': question_form, 'course':the_course})

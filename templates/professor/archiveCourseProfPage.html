@@ -55,14 +55,13 @@
         <!-- Editable table -->
 <section class="p-t-20">
     <div class="container">
-
         <div class="card">
-          <h3 class="card-header text-center font-weight-bold text-uppercase py-4">Your Current Courses</h3>
+          <h3 class="card-header text-center font-weight-bold text-uppercase py-4">Your Archived Courses</h3>
           <div class="card-body">
             <div id="table" class="table-editable">
               <span class="table-add float-right mb-3 mr-2"><a onclick="window.location.href = '/CourseForm/'" class="text-success"><i
                       class="fas fa-plus fa-2x" aria-hidden="true"></i></a></span>
-              <table contenteditable="true" class="table table-bordered table-responsive-md table-striped text-center">
+              <table class="table table-bordered table-responsive-md table-striped text-center">
                 <thead>
                   <tr>
                     <th class="text-center">Course Name</th>
@@ -71,11 +70,12 @@
                     <th class="text-center">Professor Name</th>
                     <th class="text-center">Status</th>
                     <th class="text-center">Remove</th>
+                      <th class="text-center">Edit</th>
                   </tr>
                 </thead>
                 <tbody>
                  {% for i in object.course_set.all %}
-                 {% if i.Status == 'active' %}
+                 {% if i.Status == 'archive' %}
                   <tr>
                     <td class="pt-3-half" contenteditable="true">{{i.Name}}</td>
                     <td class="pt-3-half" contenteditable="true">{{i.CourseID}}</td>
@@ -88,7 +88,8 @@
                     </td>
                     <td class="pt-3-half" contenteditable="true">{{i.Status}}</td>
                     <td>
-                            <div class="text-center">
+
+                                                  <div class="text-center">
         <button class="btn btn-danger btn-sm btn-rounded buttonDelete" data-toggle="modal" data-target="#modalDelete"
         >Remove<i class="fas fa-times ml-1"></i></button>
     </div>
@@ -108,13 +109,59 @@
           </div>
           <div class="modal-footer d-flex justify-content-center deleteButtonsWrapper">
             <button type="button" onclick="window.location.href = '/professorDeleteCourse/{{i.CourseID}}/{{i.GroupID}}'" class="btn btn-danger btnYesClass" id="btnYes" data-dismiss="modal">Delete</button>
-              <button type="button" class="btn btn-primary btnNoClass" onclick="window.location.href = '/professorArchiveCourse/{{i.CourseID}}/{{i.GroupID}}'" id="btn" data-dismiss="modal">Archive</button>
+              <button type="button" class="btn btn-primary btnNoClass"  id="btn" data-dismiss="modal">Nothing</button>
           </div>
         </div>
       </div>
     </div>
 
                     </td>
+                      <td>
+                             <div class="modal fade modalEditClass" id="modalEdit" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header text-center">
+            <h4 class="modal-title w-100 font-weight-bold text-secondary ml-5">Edit form</h4>
+            <button type="button" class="close text-secondary" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body mx-3">
+            <div class="md-form mb-5">
+              <input type="text" id="formCourseNameEdit" class="form-control validate">
+              <label data-error="wrong" data-success="right" for="formCourseNameEdit">CourseName</label>
+            </div>
+
+            <div class="md-form mb-5">
+              <input type="text" id="formCourseIDEdit" class="form-control validate">
+              <label data-error="wrong" data-success="right" for="formCourseIDEdit">CourseID</label>
+            </div>
+
+            <div class="md-form mb-5">
+              <input type="text" id="formGroupIDEdit" class="form-control validate">
+              <label data-error="wrong" data-success="right" for="formGroupIDEdit">GroupID</label>
+            </div>
+
+            <div class="md-form mb-5">
+              <input type="text" id="formProfessorNameEdit" class="form-control validate">
+              <label data-error="wrong" data-success="right" for="formProfessorNameEdit">ProfessorName</label>
+            </div>
+
+          </div>
+          <div class="modal-footer d-flex justify-content-center editInsideWrapper">
+            <button class="btn btn-outline-secondary btn-block editInside" data-dismiss="modal">Edit
+              form
+              <i class="fas fa-paper-plane-o ml-1"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center buttonEditWrapper">
+        <button class="btn btn-info btn-rounded btn-sm buttonEdit" data-toggle="modal" data-target="#modalEdit">Edit<i class="fas fa-pencil-square-o ml-1"></i></button>
+    </div>
+                      </td>
                   </tr>
                  {% endif %}
                 {% endfor %}

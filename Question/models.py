@@ -7,8 +7,7 @@ from django.db import models
 class Question(models.Model):
     Question_Types = (
         ('M', 'MultipleChoice'),
-        ('L', 'LongAnswer'),
-        ('D', 'Default')
+        ('L', 'LongAnswer')
     )
     title = models.TextField(null=False, blank=False)
     q_type = models.CharField(max_length=1, choices=Question_Types, default='M')

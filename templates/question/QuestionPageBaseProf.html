@@ -1,4 +1,4 @@
-{% extends "student/BaseStudentPage.html" %}
+{% extends "professor/BaseProfessorPage.html" %}
 {% load static %}
 
 {% block menu %}
@@ -8,7 +8,18 @@
     -->
             <div class="logo">
 
+                <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="now-ui-icons ui-1_simple-add"></i>
+                    <p>
+                        New Question
+                    </p>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="/Course/{{cid}}/{{gid}}/AddMultChoiceQ">Multiple Choice</a>
+                    <a class="dropdown-item" href="#">Feeback</a>
+                    <a class="dropdown-item" href="#">Default Question</a>
 
+                </div>
 
 
                 <form>

@@ -1,0 +1,50 @@
+{% extends "question/QuestionPage.html" %}
+{% load static %}
+
+
+{% block body %}
+<div class="content">
+                <div class="row">
+                  <div class="col-md-8">
+                    <div class="card card-tasks">
+                      <div class="card-header">
+                        <h4 class="card-title">{{the_question.title}}</h4>
+                      </div>
+                      <div class="card-body">
+                        <div class="table-full-width table-responsive">
+                          <table class="table">
+                            <tbody>
+                            {% for i in the_question.choices.all %}
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" type="checkbox" checked="">
+                                                <span class="form-check-sign"></span>
+                                            </label>
+                                        </div>
+                                    </td>
+
+                                    <td align="right" class="text-left">{{i.text}}</td>
+
+
+                                </tr>
+                            {% endfor %}
+
+
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                      <div class="card-footer">
+                        <hr>
+                        <div class="stats">
+                          <i class="now-ui-icons loader_refresh spin"></i> Updated 3 minutes ago
+                        </div>
+                      </div>
+                  </div>
+                  </div>
+                </div>
+</div>
+
+{% endblock %}

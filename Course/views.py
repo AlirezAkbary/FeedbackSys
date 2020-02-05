@@ -40,17 +40,39 @@ def AddCourse(request):
     return render(request, 'course/CourseForm.html', {'course_form':course_form})
 # Create your views here.
 
-def SearchCourse(request):
+@login_required
+def general_search(request):
+    print(request.user.username)
+    prof = Professor.objects.filter(
+        Q(ProfID=int(request.user.username))
+    )
+
+    if len(prof) != 0:
+        return search_course_professor(request)
+    else:
+        return search_course_student(request)
+
+
+def search_course_professor(request):
+    pass
+
+
+def search_course_student(request):
 
     query = request.GET.get('q')
+
     user = request.user.username
+
     user = Student.objects.filter(
         Q(StudentID=user)
     )
 
+
+
     object_list = Course.objects.filter(
         Q(Name__icontains=query)
     )
+
     professor_name_strings = []
     objects = []
     for o in object_list:
@@ -103,9 +125,13 @@ def joinCourse(request, id, group):
 @login_required
 def courseHome(request, cid, gid):
     print(request.user.username)
-    if Professor.objects.get(ProfID=int(request.user.username)) != None:
+    prof = Professor.objects.filter(
+        Q(ProfID=int(request.user.username))
+    )
+    if len(prof) != 0:
         return courseHomeProfView(request, cid, gid)
-    return courseHomeStudentView(request, cid, gid)
+    else:
+        return courseHomeStudentView(request, cid, gid)
 
 
 def courseHomeProfView(request, cid, gid):
@@ -117,6 +143,12 @@ def courseHomeProfView(request, cid, gid):
     return render(request, 'professor/ProfessorCourseView.html', context)
 
 def courseHomeStudentView(request, cid, gid):
+    the_course = Course.objects.get(CourseID=cid, GroupID=gid)
+    context = {}
+    context['course'] = the_course
+    questions = Question.objects.all()
+    context['questions'], context['cid'], context['gid'] = questions, cid, gid
+    return render(request, 'student/StudentCourseView.html', context)
     pass
 
 
@@ -144,4 +176,5 @@ def AddMultipleChoiceQuestion(request, cid, gid):
     else:
         question_form = MultipleChoiceForm()
     the_course = Course.objects.get(CourseID=cid, GroupID=gid)
-    return render(request, 'course/AddMultChoiceQ.html', {'question_form': question_form, 'course':the_course})
+    questions = Question.objects.all()
+    return render(request, 'course/AddMultChoiceQ.html', {'question_form': question_form, 'course':the_course, 'questions':questions})

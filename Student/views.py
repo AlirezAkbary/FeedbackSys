@@ -9,4 +9,7 @@ def student_view(request, id):
     context = {
         "object" : obj
     }
-    return render(request, "student/detstu.html", context)
+    print("hey")
+    for i in obj.course_set.all():
+        print(i.Name, i.Status)
+    return render(request, "student/New_HomeStudentPage.html", context)

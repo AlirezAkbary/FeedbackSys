@@ -24,7 +24,7 @@ from Student.views import student_view
 from Professor.views import professor_view,archiveCourseProfessor_view,professorDeleteCourse_view, professorArchiveCourse_view
 from . import settings
 from Course.views import *
-from Question.views import QuestionView
+from Question.views import *
 def home_view(request):
     return render(request, "index.html", {})
 
@@ -33,7 +33,7 @@ def home_view(request):
 urlpatterns = [
     path('', user_login, name='home'),
     path('admin/', admin.site.urls),
-    path('search/', SearchCourse, name='search_results'),
+    path('search/', general_search, name='search_results'),
     path('courseadd/<int:id>/<int:group>', joinCourse, name='join_course'),
 
     path('signup/', signup, name='signup'),
@@ -48,7 +48,7 @@ urlpatterns = [
 
     path('Course/<int:cid>/<int:gid>/AddMultChoiceQ', AddMultipleChoiceQuestion, name='MultChoiceQ'),
 
-    path('Course/<int:cid>/<int:gid>/Question/<int:qid>', QuestionView),
+    path('Course/<int:cid>/<int:gid>/Question/<int:qid>', question_view_general),
     url(r'^logout/$', user_logout, name='logout')
 ]
 

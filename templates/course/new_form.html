@@ -1,0 +1,153 @@
+{% extends "professor/BaseProfessorPage.html" %}
+{% load static %}
+
+{% block menu %}
+
+
+        <div class="sidebar" data-color="black">
+            <!--
+        Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
+    -->
+            <div class="logo">
+                <a href="http://www.creative-tim.com" class="simple-text logo-mini">
+                    CT
+                </a>
+                <a href="http://www.creative-tim.com" class="simple-text logo-normal">
+                    {{object.FirstName}}
+                    {{object.LastName}}
+                </a>
+            </div>
+            <div class="sidebar-wrapper">
+                <ul class="nav">
+                    <li>
+                        <a onclick="window.location.href= '/professor/{{user.username}}'">
+                            <i class="now-ui-icons design_app"></i>
+                            <p>Current Courses</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a onclick="window.location.href= '/archiveCourseProfessor/{{user.username}}'">
+                            <i class="now-ui-icons education_atom"></i>
+                            <p>Archive Courses</p>
+                        </a>
+                    </li>
+                     <li class="active">
+                        <a onclick="window.location.href= '/notifications/{{user.username}}'">
+                            <i class="now-ui-icons ui-1_bell-53"></i>
+                            <p>Notifications</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a onclick="window.location.href= '/CourseForm/'">
+                            <i class="now-ui-icons location_map-big"></i>
+                            <p>Add a Course</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="../notifications.html">
+                            <i class="now-ui-icons ui-1_bell-53"></i>
+                            <p>Edit Courses</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+{% endblock %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block body%}
+
+        <!-- Editable table -->
+<div class="content">
+
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title"> Add course</h4>
+                            </div>
+                            <div class="card-body">
+                                <form action="{{request.path}}" method="post" id="form1">
+                                    {% csrf_token %}
+
+                                    <div class="col-md-5 pr-1">
+                                         {{ course_form.as_p }}
+                                        <div class="element-wrapper">
+                                            <div class="row" style="display: none">
+                                                <label >Another Choice</label>
+                                                <input name="new" type="text" class="form-control" placeholder="New Choice..."/>
+                                                <button type="button" onclick="deleterow()" class="btn btn-round btn-default btn-simple btn-icon">
+                                                    <i class="now-ui-icons ui-1_simple-delete"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                     Please enter Other Professor's ID if There is any
+                                    <button type="button" onclick="addrow()" class="btn btn-round btn-simple btn-icon">
+
+                                        <i class="now-ui-icons ui-1_simple-add"></i>
+                                    </button>
+
+                                    <div class="col-md-8">
+                                        <button type="submit" form="form1" class="btn btn-round btn-simple">
+                                            Submit
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+<!--Modal: modalConfirmDelete-->
+    <script type="text/javascript">
+
+    function addrow (){
+        var row = $(".row").eq(0).clone().show();
+        $(".element-wrapper").append(row);
+    }
+
+    function deleterow (){
+        var index = $(".btn-remove-row").index(this);
+        $(".row").eq(index).remove();
+    }
+</script>
+
+<script type="text/javascript">
+    $(document).on("click", ".btn-add-row", function () {
+        alert("hello");
+        var row = $(".row").eq(0).clone().show();
+        $(".element-wrapper").append(row);
+    });
+
+
+    $(document).on("click", ".btn-remove-row", function () {
+
+        var index = $(".btn-remove-row").index(this);
+        $(".row").eq(index).remove();
+    })
+</script>
+    <script type="text/javascript">
+    $(document).on("click", ".btn-add-row", function () {
+        alert("hello");
+        var row = $(".row").eq(0).clone().show();
+        $(".element-wrapper").append(row);
+    });
+
+
+    $(document).on("click", ".btn-remove-row", function () {
+
+        var index = $(".btn-remove-row").index(this);
+        $(".row").eq(index).remove();
+    })
+</script>
+
+
+<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+
+
+{% endblock %}
+

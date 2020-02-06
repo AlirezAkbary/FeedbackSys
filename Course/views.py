@@ -37,7 +37,7 @@ def AddCourse(request):
         return HttpResponseRedirect(reverse('professor', kwargs={'id':int(request.user.username)}))
     else:
         course_form = CourseCreateForm()
-    return render(request, 'course/CourseForm.html', {'course_form':course_form})
+    return render(request, 'course/new_form.html', {'course_form':course_form})
 # Create your views here.
 
 @login_required

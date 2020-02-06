@@ -19,7 +19,7 @@ from django.conf.urls import url
 from django.shortcuts import render
 from django.contrib.staticfiles.urls import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from User.views import signup, user_login, user_logout
+from User.views import signup, user_login, user_logout, verification
 from Student.views import student_view
 from Professor.views import professor_view,archiveCourseProfessor_view,professorDeleteCourse_view, professorArchiveCourse_view
 from . import settings
@@ -45,6 +45,8 @@ urlpatterns = [
 
     path('CourseForm/', AddCourse, name='addcourseform'),
     path('Course/<int:cid>/<int:gid>', courseHome,name="courseHome"),
+
+    path('Verification/<int:id>', verification),
 
     path('Course/<int:cid>/<int:gid>/AddMultChoiceQ', AddMultipleChoiceQuestion, name='MultChoiceQ'),
 

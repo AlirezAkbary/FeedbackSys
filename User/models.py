@@ -8,6 +8,8 @@ class UserProfile(models.Model):
     profile_pic = models.ImageField(upload_to='profile_pics', blank=True)
     FirstName = models.CharField(null=False, blank=False, max_length=100)
     LastName = models.CharField(null=False, blank=False, max_length=100)
+    Activated = models.BooleanField(null=False, blank=False, default=True)
+    VerifyCode = models.CharField(null=True, blank=False, max_length=20)
     class Meta:
         abstract = True
 

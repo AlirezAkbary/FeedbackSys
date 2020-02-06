@@ -9,6 +9,14 @@ https://docs.djangoproject.com/en/3.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
+#for email
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'kondorsuppteam@gmail.com'
+EMAIL_HOST_PASSWORD = 'salamedu'
+EMAIL_PORT = 587
+
 
 import os
 

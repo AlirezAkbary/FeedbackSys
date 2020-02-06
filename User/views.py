@@ -6,10 +6,15 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.db.models import Q
+from django.core.mail import EmailMessage
 from Professor.models import Professor
 from Student.models import Student
+from User.models import UserProfile
 import copy
 import json
+import random
+
 # Create your views here.
 
 
@@ -18,7 +23,9 @@ def signup(request):
     registered = False
     a = copy.deepcopy(str(request.body))
     #print(a)
+    flag = False
     if request.method == 'POST':
+        flag = True
         print(request.method, "akbar")
 
         if a.find("\x46\x69\x65\x6c\x64") != -1 or a.find("Field") != -1:
@@ -32,9 +39,20 @@ def signup(request):
                 profile = prof_form.save(commit=False)
                 profile.user = user
                 profile.ProfID = user.username
+                subject = 'Thank you for your registertion - Kondor Team'
+                randomCode = str(random.randint(10000000, 99999999))
+                message = 'This is from lovely Kimia\n Dear Bana, This is your Verfication Code to my room : ' + randomCode + '\n Im waiting for you in Pakdasht.'
+                toEmailList = user.email
+
+                email = EmailMessage(
+                        subject, message, to=[toEmailList]
+                )
+                email.send()
                 if 'profile_pic' in request.FILES:
                     #print('found it')
                     profile.profile_pic = request.FILES['profile_pic']
+                profile.Activated = False
+                profile.VerifyCode = randomCode
                 profile.save()
                 registered = True
             else:
@@ -54,9 +72,22 @@ def signup(request):
                 profile = profile_form.save(commit=False)
                 profile.user = user
                 profile.StudentID = user.username
+
+                subject = 'Thank you for your registertion - Kondor Team'
+                randomCode = str(random.randint(10000000, 99999999))
+                message = 'Verfication Code : ' + randomCode
+                toEmailList = user.email
+
+                email = EmailMessage(
+                        subject, message, to=[toEmailList]
+                )
+                email.send()
+
                 if 'profile_pic' in request.FILES:
-                    #print('found it')
                     profile.profile_pic = request.FILES['profile_pic']
+
+                profile.Activated = False
+                profile.VerifyCode = randomCode
                 profile.save()
                 registered = True
             else:
@@ -71,8 +102,10 @@ def signup(request):
 
     print("AWLIIIII", registered)
     #return HttpResponse("user logged in")
-    return render(request,'signup.html',{'user_form':user_form,'profile_form':profile_form,'prof_form':prof_form,'registered':registered})
-
+    if flag:
+        return render(request,'VerificationPage.html',{'user_form':user_form,'profile_form':profile_form,'prof_form':prof_form,'registered':registered})
+    else:
+        return render(request,'signup.html',{'user_form':user_form,'profile_form':profile_form,'prof_form':prof_form,'registered':registered})
 @login_required
 def user_logout(request):
     logout(request)
@@ -88,15 +121,19 @@ def user_login(request):
                 try:
                     if Student.objects.get(StudentID=username) != None:
                         print("bale")
-                        login(request, user)
+                        the_student = Student.objects.get(StudentID=username)
+                        if the_student.Activated:
+                            login(request, user)
                         #return HttpResponseRedirect("/signup")
 
-                        return HttpResponse(str(username) + "*Student-Login")
+                            return HttpResponse(str(username) + "*Student-Login")
                 except:
                     try:
                         if Professor.objects.get(ProfID=username) != None:
-                            login(request, user)
-                            return HttpResponse(str(username) + "*Professor-Login")
+                            the_professor = Professor.objects.get(ProfID=username)
+                            if the_professor.Activated:
+                                login(request, user)
+                                return HttpResponse(str(username) + "*Professor-Login")
                     except:
                         return HttpResponse("Invalid login details given")
             else:
@@ -107,3 +144,25 @@ def user_login(request):
             return HttpResponse("Invalid login details given")
     else:
         return render(request, 'index.html', {})
+
+
+def verification(request, id):
+    if request.method == "POST":
+        post_dict = dict(request.POST.lists())
+        submitted_code = post_dict['verify'][0]
+        flag = False
+        this = Professor.objects.filter(Q(ProfID=id))
+        print(this)
+        if len(this) != 0:
+            if this[0].VerifyCode == submitted_code:
+                Professor.objects.filter(Q(ProfID=id)).update(Activated=True)
+                return HttpResponseRedirect(reverse('home'))
+        else:
+            that = Student.objects.filter(Q(StudentID=id))
+            if that[0].VerifyCode == submitted_code:
+                Student.objects.filter(Q(StudentID=id)).update(Activated=True)
+                return HttpResponseRedirect(reverse('home'))
+            
+    return render(request, 'VerificationPage.html', {}) 
+
+    pass

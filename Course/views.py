@@ -72,7 +72,12 @@ def search_course_student(request):
     object_list = Course.objects.filter(
         Q(Name__icontains=query)
     )
-
+    is_in = False
+    for o in object_list:
+        for u in o.not_verified_students.all() :
+            if u.StudentID == user[0].StudentID:
+                is_in = True
+    print(is_in)
     professor_name_strings = []
     objects = []
     for o in object_list:
@@ -87,16 +92,17 @@ def search_course_student(request):
 
     context = {
         'object': object_list,
-        'user':user[0],
+        'u':user[0],
         'names':professor_name_strings,
-        'iter' : 0
+        'query' : query,
+        'is_not_verified' : is_in
     }
 
 
 
-    return render(request, 'Course/Course_Search.html', context)
+    return render(request, 'Course/new_search.html', context)
 
-def joinCourse(request, id, group):
+def joinCourse(request, id, group, query):
     object = Course.objects.filter(
         Q(CourseID=id, GroupID = group)
 
@@ -110,7 +116,7 @@ def joinCourse(request, id, group):
         "user":user[0]
     }
 
-    object[0].Student.add(user[0])
+    object[0].not_verified_students.add(user[0])
 
     print(user[0].course_set.all())
     print(object[0].Student.all())
@@ -119,7 +125,7 @@ def joinCourse(request, id, group):
 
 
 
-    return render(request, 'Course/joinCourse.html', context)
+    return HttpResponseRedirect("/./search/?q="+query)
 
 
 @login_required

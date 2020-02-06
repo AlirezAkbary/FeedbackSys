@@ -1,6 +1,6 @@
 from django.db import models
 from Professor.models import Professor
-from Student.models import Student
+from Student.models import Student as St
 from Question.models import Question
 # Create your models here.
 
@@ -10,8 +10,9 @@ class Course(models.Model):
     GroupID = models.PositiveSmallIntegerField(null=False, blank=False)
     Name = models.CharField(null=False, blank=False, max_length=100)
     Professor = models.ManyToManyField(Professor, blank=False)
-    Student = models.ManyToManyField(Student, blank=False)
-    Questions = models.ManyToManyField(Question, null=True, blank=True)
+    Student = models.ManyToManyField(St, blank=False)
+    not_verified_students = models.ManyToManyField(St, blank=False, related_name='not_verified')
+    Questions = models.ManyToManyField(Question,  blank=True)
     Status = models.CharField(max_length=20, null=True, blank=False, choices=StatusChoices, default='active')
 
     class Meta:

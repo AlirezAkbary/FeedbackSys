@@ -4,3 +4,4 @@ from Question.models import *
 admin.site.register(MultipleChoiceQuestion)
 admin.site.register(LongAnswerQuestion)
 admin.site.register(Choice)
+admin.site.register(Answer)

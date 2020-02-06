@@ -13,27 +13,15 @@
                       <div class="card-body">
                           {% if answer_status == -1 %}
                           <form action="{{request.path}}" method="post" id="form1">
-                            <ul class="quiz">
-
-                                <li>
-
-                                        <ul class="choices">
-                                            {% for i in the_question.choices.all %}
-                                            <li><label><input type="radio" name="question" value="{{i.id}}"><span>{{i.text}}</span></label></li>
-                                            {% endfor %}
-                                        </ul>
-                                  </li>
-
-
-                            </ul>
-                              </form>
+                          <input name="answer" type="text" class="form-control" placeholder="Your Answer..."/>
+                          </form>
                                     <div class="col-md-8">
                                         <button type="submit" form="form1" class="btn btn-round btn-simple">
                                             Submit
                                         </button>
                                     </div>
                           {% else %}
-                          <p>You answered {{answer.text}}</p>
+                        <p>You answered : {{answer.text}}</p>
                           {% endif %}
 
 

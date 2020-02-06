@@ -2,6 +2,37 @@
 {% load static %}
 
 {% block menu %}
+<head>
+<style>
+.green_button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 5px 25px ;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px 0px 2px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.red_button {
+  background-color: #FF0000;
+  border: none;
+  color: white;
+  padding: 5px 25px ;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px 0px 2px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+</style>
+</head>
         <div class="sidebar" data-color="black">
             <!--
         Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
@@ -17,7 +48,7 @@
             </div>
             <div class="sidebar-wrapper">
                 <ul class="nav">
-                    <li class="active">
+                    <li>
                         <a onclick="window.location.href= '/professor/{{user.username}}'">
                             <i class="now-ui-icons design_app"></i>
                             <p>Current Courses</p>
@@ -29,7 +60,7 @@
                             <p>Archive Courses</p>
                         </a>
                     </li>
-                     <li>
+                     <li class="active">
                         <a onclick="window.location.href= '/notifications/{{user.username}}'">
                             <i class="now-ui-icons ui-1_bell-53"></i>
                             <p>Notifications</p>
@@ -68,7 +99,9 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
+
                                     <table class="table">
+                                           <button type="button" onclick="window.location.href = '/verify_all'" class="green_button" id="btn" data-dismiss="modal">verify all</button>
                                         <thead class=" text-primary">
                                             <th>
                                                 Course Name
@@ -80,14 +113,15 @@
                                                 GroupID
                                             </th>
                                             <th>
-                                                Professor Name
+                                                Student Name
                                             </th>
                                             <th>
                                                 Status
                                             </th>
                                             <th>
-                                                Remove
+                                                verify
                                             </th>
+
                                             <th>
                                                 Course Page
                                             </th>
@@ -95,46 +129,46 @@
 
                                         <tbody>
                  {% for i in object.course_set.all %}
+                 {% for j in i.not_verified_students.all %}
                  {% if i.Status == 'active' %}
                   <tr>
                     <td>{{i.Name}}</td>
                     <td>{{i.CourseID}}</td>
                     <td>{{i.GroupID}}</td>
                     <td>
-                        {% for j in i.Professor.all %}
-                        {{ j.FirstName }}  {{ j.LastName }}
-                          <p></p>
-                        {% endfor %}
+                       {{j.FirstName}} {{j.LastName}}
+
                     </td>
                     <td>{{i.Status}}</td>
                     <td>
                             <div class="text-center">
-        <button class="btn btn-danger btn-sm btn-rounded buttonDelete" data-toggle="modal" data-target="#modalDelete"
-        >Remove<i class="fas fa-times ml-1"></i></button>
+        <button class="green_button" data-toggle="modal" data-target="#modalDelete"
+        >add &nbsp <i class="now-ui-icons ui-1_check"></i></button>
     </div>
                         <div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="modalDelete"
       aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header text-center">
-            <h4 class="modal-title w-100 font-weight-bold ml-5 text-danger">Remove</h4>
+            <h4 class="modal-title w-100 font-weight-bold ml-5 text-danger">verify</h4>
             <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body mx-3">
-            <p class="text-center h4">what do you want to do with this course ? </p>
+            <p class="text-center h4">what do you want to do with this student? </p>
 
           </div>
           <div class="modal-footer d-flex justify-content-center deleteButtonsWrapper">
-            <button type="button" onclick="window.location.href = '/professorDeleteCourse/{{i.CourseID}}/{{i.GroupID}}'" class="btn btn-danger btnYesClass" id="btnYes" data-dismiss="modal">Delete</button>
-              <button type="button" class="btn btn-primary btnNoClass" onclick="window.location.href = '/professorArchiveCourse/{{i.CourseID}}/{{i.GroupID}}'" id="btn" data-dismiss="modal">Archive</button>
+            <button type="button" onclick="window.location.href = '/verify/{{i.CourseID}}/{{i.GroupID}}/{{j.StudentID}}'" class="green_button" id="btnYes" data-dismiss="modal">verify</button>
+              <button type="button" class="red_button" onclick="window.location.href = '/reject/{{i.CourseID}}/{{i.GroupID}}/{{j.StudentID}}'" id="btn" data-dismiss="modal">remove</button>
           </div>
         </div>
       </div>
     </div>
 
                     </td>
+
                       <td>
                                     <button type="button" onclick="window.location.href = '/Course/{{i.CourseID}}/{{i.GroupID}}'" class="btn btn-round btn-simple btn-icon">
                                         <i class="now-ui-icons arrows-1_minimal-right"></i>
@@ -143,6 +177,7 @@
                   </tr>
                  {% endif %}
                 {% endfor %}
+                 {% endfor %}
                 </tbody>
 
                                     </table>

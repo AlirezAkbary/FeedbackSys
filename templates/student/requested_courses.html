@@ -1,4 +1,4 @@
-{% extends "professor/BaseProfessorPage.html" %}
+{% extends "student/BaseStudentPage.html" %}
 {% load static %}
 
 {% block menu %}
@@ -17,22 +17,23 @@
             </div>
             <div class="sidebar-wrapper">
                 <ul class="nav">
-                    <li class="active">
-                        <a onclick="window.location.href= '/professor/{{user.username}}'">
+                    <li>
+                        <a onclick="window.location.href= '/student/{{user.username}}'">
                             <i class="now-ui-icons design_app"></i>
                             <p>Current Courses</p>
                         </a>
                     </li>
+                    <li class="active">
+                        <a onclick="window.location.href= '/requestedCourses/{{user.username}}'">
+                            <i class="now-ui-icons ui-1_check"></i>
+                            <p>Requested Courses</p>
+                        </a>
+                    </li>
+
                     <li>
                         <a onclick="window.location.href= '/archiveCourseProfessor/{{user.username}}'">
                             <i class="now-ui-icons education_atom"></i>
                             <p>Archive Courses</p>
-                        </a>
-                    </li>
-                     <li>
-                        <a onclick="window.location.href= '/notifications/{{user.username}}'">
-                            <i class="now-ui-icons ui-1_bell-53"></i>
-                            <p>Notifications</p>
                         </a>
                     </li>
                     <li>
@@ -88,13 +89,11 @@
                                             <th>
                                                 Remove
                                             </th>
-                                            <th>
-                                                Course Page
-                                            </th>
+
                                         </thead>
 
                                         <tbody>
-                 {% for i in object.course_set.all %}
+                 {% for i in object.not_verified.all %}
                  {% if i.Status == 'active' %}
                   <tr>
                     <td>{{i.Name}}</td>
@@ -106,7 +105,7 @@
                           <p></p>
                         {% endfor %}
                     </td>
-                    <td>{{i.Status}}</td>
+                    <td> pending </td>
                     <td>
                             <div class="text-center">
         <button class="btn btn-danger btn-sm btn-rounded buttonDelete" data-toggle="modal" data-target="#modalDelete"
@@ -135,11 +134,7 @@
     </div>
 
                     </td>
-                      <td>
-                                    <button type="button" onclick="window.location.href = '/Course/{{i.CourseID}}/{{i.GroupID}}'" class="btn btn-round btn-simple btn-icon">
-                                        <i class="now-ui-icons arrows-1_minimal-right"></i>
-                                    </button>
-                      </td>
+
                   </tr>
                  {% endif %}
                 {% endfor %}

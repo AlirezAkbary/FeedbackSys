@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponseRedirect
 from .models import Professor
 from Course.models import Course
+from Student.models import Student
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 
@@ -42,7 +43,7 @@ def professorDeleteCourse_view(request, cid, gid):
     print(id)
     print(cid)
 
-    course[0].Professor.remove(prof)
+    course[0].delete()
     context = {
         "object" : prof
     }
@@ -59,5 +60,59 @@ def professorArchiveCourse_view(request, cid, gid):
         "object": prof
     }
     return render(request, "professor/New_HomeProfPage.html", context)
+
+
+def professor_notifications(request, id):
+    prof = Professor.objects.get(ProfID=id)
+    context = {
+        "object": prof
+    }
+    return render(request, "professor/notifs.html", context)
+
+def prof_add_student(request, cid, gid, sid):
+    id = request.user.username
+    prof = Professor.objects.get(ProfID=id)
+    student = Student.objects.get(StudentID=sid)
+    course = Course.objects.filter(
+        Q(CourseID=cid, GroupID=gid)
+    )
+    course[0].not_verified_students.remove(student)
+    course[0].Student.add(student)
+    context = {
+        "object": prof
+    }
+    url = "/./notifications/" + id
+    return HttpResponseRedirect(url)
+
+def prof_reject_student(request, cid, gid, sid):
+    id = request.user.username
+    prof = Professor.objects.get(ProfID=id)
+    student = Student.objects.get(StudentID=sid)
+    course = Course.objects.filter(
+        Q(CourseID=cid, GroupID=gid)
+    )
+    course[0].not_verified_students.remove(student)
+
+
+    context = {
+        "object": prof
+    }
+    url = "/./notifications/" + id
+    return HttpResponseRedirect(url)
+
+def verify_all(request):
+    id = request.user.username
+    prof = Professor.objects.get(ProfID=id)
+
+    for j in prof.course_set.all():
+        for i in j.not_verified_students.all():
+            j.Student.add(i)
+            j.not_verified_students.remove(i)
+
+
+
+    url = "/./notifications/" + id
+    return HttpResponseRedirect(url)
+
 
 

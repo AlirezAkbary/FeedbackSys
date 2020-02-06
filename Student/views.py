@@ -13,3 +13,12 @@ def student_view(request, id):
     for i in obj.course_set.all():
         print(i.Name, i.Status)
     return render(request, "student/New_HomeStudentPage.html", context)
+
+def student_requested_courses_view(request, id):
+    obj = Student.objects.get(StudentID=id)
+    context = {
+        "object": obj
+    }
+    for i in obj.not_verified.all():
+        print(i.Name, i.Status)
+    return render(request, "student/requested_courses.html", context)

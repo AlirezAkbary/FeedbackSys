@@ -1,5 +1,4 @@
 from django.db import models
-
 # Create your models here.
 
 
@@ -24,4 +23,9 @@ class LongAnswerQuestion(Question):
 class Choice(models.Model):
     question = models.ForeignKey(MultipleChoiceQuestion, related_name="choices", on_delete=models.CASCADE)
     text = models.TextField(null=False, blank=False)
+
+
+class Answer(models.Model):
+    question = models.ForeignKey(LongAnswerQuestion, related_name='answers', on_delete=models.CASCADE)
+    text = models.TextField(null=False, blank=False, default="Your Answer")
     ###position maybe

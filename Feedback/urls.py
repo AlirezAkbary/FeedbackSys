@@ -56,7 +56,7 @@ urlpatterns = [
     path('CourseForm/', AddCourse, name='addcourseform'),
     path('Course/<int:cid>/<int:gid>', courseHome,name="courseHome"),
 
-    path('Verification/<int:id>', verification),
+    path('Verification/<int:id>', verification, name='verification'),
 
     path('Course/<int:cid>/<int:gid>/AddMultChoiceQ', AddMultipleChoiceQuestion, name='MultChoiceQ'),
 

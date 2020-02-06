@@ -24,8 +24,9 @@ def signup(request):
     a = copy.deepcopy(str(request.body))
     #print(a)
     flag = False
+    needed_id = ""
     if request.method == 'POST':
-        flag = True
+
         print(request.method, "akbar")
 
         if a.find("\x46\x69\x65\x6c\x64") != -1 or a.find("Field") != -1:
@@ -33,15 +34,17 @@ def signup(request):
             prof_form = ProfessorSignUpForm(data=request.POST)
             profile_form = StudentSignUpForm()
             if user_form.is_valid() and prof_form.is_valid():
+                flag = True
                 user = user_form.save()
                 user.set_password(user.password)
                 user.save()
                 profile = prof_form.save(commit=False)
                 profile.user = user
                 profile.ProfID = user.username
+                needed_id = str(user.username)
                 subject = 'Thank you for your registertion - Kondor Team'
                 randomCode = str(random.randint(10000000, 99999999))
-                message = 'This is from lovely Kimia\n Dear Bana, This is your Verfication Code to my room : ' + randomCode + '\n Im waiting for you in Pakdasht.'
+                message = 'Verfication Code : ' + randomCode
                 toEmailList = user.email
 
                 email = EmailMessage(
@@ -66,12 +69,14 @@ def signup(request):
             profile_form = StudentSignUpForm(data=request.POST)
             prof_form = ProfessorSignUpForm()
             if user_form.is_valid() and profile_form.is_valid():
+                flag=True
                 user = user_form.save()
                 user.set_password(user.password)
                 user.save()
                 profile = profile_form.save(commit=False)
                 profile.user = user
                 profile.StudentID = user.username
+                needed_id = str(user.username)
 
                 subject = 'Thank you for your registertion - Kondor Team'
                 randomCode = str(random.randint(10000000, 99999999))
@@ -100,10 +105,11 @@ def signup(request):
         prof_form = ProfessorSignUpForm()
 
 
-    print("AWLIIIII", registered)
+    print("AWLIIIII", registered, flag)
     #return HttpResponse("user logged in")
     if flag:
-        return render(request,'VerificationPage.html',{'user_form':user_form,'profile_form':profile_form,'prof_form':prof_form,'registered':registered})
+        return HttpResponseRedirect(reverse('verification', kwargs={'id':needed_id}))
+        #return render(request,'VerificationPage.html',{'user_form':user_form,'profile_form':profile_form,'prof_form':prof_form,'registered':registered, 'id':needed_id})
     else:
         return render(request,'signup.html',{'user_form':user_form,'profile_form':profile_form,'prof_form':prof_form,'registered':registered})
 @login_required
@@ -152,6 +158,7 @@ def verification(request, id):
         submitted_code = post_dict['verify'][0]
         flag = False
         this = Professor.objects.filter(Q(ProfID=id))
+
         print(this)
         if len(this) != 0:
             if this[0].VerifyCode == submitted_code:
@@ -163,6 +170,5 @@ def verification(request, id):
                 Student.objects.filter(Q(StudentID=id)).update(Activated=True)
                 return HttpResponseRedirect(reverse('home'))
             
-    return render(request, 'VerificationPage.html', {}) 
+    return render(request, 'VerificationPage.html', {'id':id})
 
-    pass

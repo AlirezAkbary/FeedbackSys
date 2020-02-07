@@ -58,7 +58,9 @@ def professorDeleteCourse_view(request, cid, gid):
     context = {
         "object" : prof
     }
-    return render(request, "professor/New_HomeProfPage.html", context)
+    url = "/./professor/" + id
+    return HttpResponseRedirect(url)
+
 # Create your views here.
 @login_required
 def professorArchiveCourse_view(request, cid, gid):

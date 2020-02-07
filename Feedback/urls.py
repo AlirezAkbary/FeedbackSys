@@ -21,7 +21,7 @@ from django.contrib.staticfiles.urls import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from User.views import signup, user_login, user_logout, verification
-from Student.views import student_view, student_requested_courses_view
+from Student.views import student_view, student_requested_courses_view, archiveCourseStudent_view
 from Professor.views import professor_view,archiveCourseProfessor_view,professorDeleteCourse_view, professorArchiveCourse_view, professor_notifications, prof_add_student, prof_reject_student, verify_all
 
 from . import settings
@@ -52,6 +52,7 @@ urlpatterns = [
     path('professorDeleteCourse/<int:cid>/<int:gid>', professorDeleteCourse_view, name='professorDeleteCourse'),
     path('professorArchiveCourse/<int:cid>/<int:gid>', professorArchiveCourse_view, name='professorArchiveCourse'),
 
+path('archiveCourseStudent/<int:id>', archiveCourseStudent_view, name='ArchivedCourseStudent'),
 
     path('CourseForm/', AddCourse, name='addcourseform'),
     path('Course/<int:cid>/<int:gid>', courseHome,name="courseHome"),

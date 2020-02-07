@@ -1,161 +1,1 @@
-{% extends "professor/BaseProfessorPage.html" %}
-{% load static %}
-
-{% block menu %}
-        <div class="sidebar" data-color="black">
-            <!--
-        Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
-    -->
-            <div class="logo">
-                <a href="http://www.creative-tim.com" class="simple-text logo-mini">
-                    CT
-                </a>
-                <a href="http://www.creative-tim.com" class="simple-text logo-normal">
-                    {{object.FirstName}}
-                    {{object.LastName}}
-                </a>
-            </div>
-            <div class="sidebar-wrapper">
-                <ul class="nav">
-                    <li class="active">
-                        <a onclick="window.location.href= '/professor/{{user.username}}'">
-                            <i class="now-ui-icons design_app"></i>
-                            <p>Current Courses</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a onclick="window.location.href= '/archiveCourseProfessor/{{user.username}}'">
-                            <i class="now-ui-icons education_atom"></i>
-                            <p>Archive Courses</p>
-                        </a>
-                    </li>
-                     <li>
-                        <a onclick="window.location.href= '/notifications/{{user.username}}'">
-                            <i class="now-ui-icons ui-1_bell-53"></i>
-                            <p>Notifications</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a onclick="window.location.href= '/CourseForm/'">
-                            <i class="now-ui-icons location_map-big"></i>
-                            <p>Add a Course</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="../notifications.html">
-                            <i class="now-ui-icons ui-1_bell-53"></i>
-                            <p>Edit Courses</p>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-{% endblock %}
-
-{% block title %}
-
-{% endblock %}
-
-{% block body%}
-
-        <!-- Editable table -->
-<div class="content">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title"> Simple Table</h4>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <thead class=" text-primary">
-                                            <th>
-                                                Course Name
-                                            </th>
-                                            <th>
-                                                CourseID
-                                            </th>
-                                            <th>
-                                                GroupID
-                                            </th>
-                                            <th>
-                                                Professor Name
-                                            </th>
-                                            <th>
-                                                Status
-                                            </th>
-                                            <th>
-                                                Remove
-                                            </th>
-                                            <th>
-                                                Course Page
-                                            </th>
-                                        </thead>
-
-                                        <tbody>
-                 {% for i in object.course_set.all %}
-                 {% if i.Status == 'active' %}
-                  <tr>
-                    <td>{{i.Name}}</td>
-                    <td>{{i.CourseID}}</td>
-                    <td>{{i.GroupID}}</td>
-                    <td>
-                        {% for j in i.Professor.all %}
-                        {{ j.FirstName }}  {{ j.LastName }}
-                          <p></p>
-                        {% endfor %}
-                    </td>
-                    <td>{{i.Status}}</td>
-                    <td>
-                            <div class="text-center">
-        <button class="btn btn-danger btn-sm btn-rounded buttonDelete" data-toggle="modal" data-target="#modalDelete"
-        >Remove<i class="fas fa-times ml-1"></i></button>
-    </div>
-                        <div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="modalDelete"
-      aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header text-center">
-            <h4 class="modal-title w-100 font-weight-bold ml-5 text-danger">Remove</h4>
-            <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body mx-3">
-            <p class="text-center h4">what do you want to do with this course ? </p>
-
-          </div>
-          <div class="modal-footer d-flex justify-content-center deleteButtonsWrapper">
-            <button type="button" onclick="window.location.href = '/professorDeleteCourse/{{i.CourseID}}/{{i.GroupID}}'" class="btn btn-danger btnYesClass" id="btnYes" data-dismiss="modal">Delete</button>
-              <button type="button" class="btn btn-primary btnNoClass" onclick="window.location.href = '/professorArchiveCourse/{{i.CourseID}}/{{i.GroupID}}'" id="btn" data-dismiss="modal">Archive</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-                    </td>
-                      <td>
-                                    <button type="button" onclick="window.location.href = '/Course/{{i.CourseID}}/{{i.GroupID}}'" class="btn btn-round btn-simple btn-icon">
-                                        <i class="now-ui-icons arrows-1_minimal-right"></i>
-                                    </button>
-                      </td>
-                  </tr>
-                 {% endif %}
-                {% endfor %}
-                </tbody>
-
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-<!--Modal: modalConfirmDelete-->
-
-{% endblock %}
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-
+{% extends "professor/BaseProfessorPage.html" %}{% load static %}{% block menu %}        <div class="sidebar" data-color="black">            <!--        Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"    -->            <div class="logo">                <a href="http://www.creative-tim.com" class="simple-text logo-mini">                    CT                </a>                <a href="http://www.creative-tim.com" class="simple-text logo-normal">                    {{object.FirstName}}                    {{object.LastName}}                </a>            </div>            <div class="sidebar-wrapper">                <ul class="nav">                    <li class="active">                        <a onclick="window.location.href= '/professor/{{user.username}}'">                            <i class="now-ui-icons design_app"></i>                            <p>Current Courses</p>                        </a>                    </li>                    <li>                        <a onclick="window.location.href= '/archiveCourseProfessor/{{user.username}}'">                            <i class="now-ui-icons education_atom"></i>                            <p>Archive Courses</p>                        </a>                    </li>                     <li>                        <a onclick="window.location.href= '/notifications/{{user.username}}'">                            <i class="now-ui-icons ui-1_bell-53"></i>                            <p>Notifications</p>                        </a>                    </li>                    <li>                        <a onclick="window.location.href= '/CourseForm/'">                            <i class="now-ui-icons location_map-big"></i>                            <p>Add a Course</p>                        </a>                    </li>                    <li>                        <a href="../notifications.html">                            <i class="now-ui-icons ui-1_bell-53"></i>                            <p>Edit Courses</p>                        </a>                    </li>                </ul>            </div>        </div>{% endblock %}{% block title %}{% endblock %}{% block body%}        <!-- Editable table --><div class="content">                <div class="row">                    <div class="col-md-12">                        <div class="card">                            <div class="card-header">                                <h4 class="card-title"> Simple Table</h4>                            </div>                            <div class="card-body">                                <div class="table-responsive">                                    <table class="table">                                        <thead class=" text-primary">                                            <th>                                                Course Name                                            </th>                                            <th>                                                CourseID                                            </th>                                            <th>                                                GroupID                                            </th>                                            <th>                                                Professor Name                                            </th>                                            <th>                                                Status                                            </th>                                            <th>                                                Remove                                            </th>                                            <th>                                                Course Page                                            </th>                                        </thead>                                        <tbody>                 {% for k in object.course_set.all %}                 {% if k.Status == 'active' %}                  <tr>                    <td>{{k.Name}}</td>                    <td>{{k.CourseID}}</td>                    <td>{{k.GroupID}}</td>                    <td>                        {% for j in k.Professor.all %}                        {{ j.FirstName }}  {{ j.LastName }}                          <p></p>                        {% endfor %}                    </td>                    <td>{{k.Status}}</td>                    <td>                            <div class="text-center">        <button class="btn btn-danger btn-sm btn-rounded buttonDelete" data-toggle="modal" data-target="#modalDelete{{k.CourseID}}{{k.GroupID}}"        >Remove<i class="fas fa-times ml-1"></i></button>    </div>                        <div class="modal fade" id="modalDelete{{k.CourseID}}{{k.GroupID}}" tabindex="-1" role="dialog" aria-labelledby="modalDelete"      aria-hidden="true">      <div class="modal-dialog" role="document">        <div class="modal-content">          <div class="modal-header text-center">            <h4 class="modal-title w-100 font-weight-bold ml-5 text-danger">Remve</h4>            <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">              <span aria-hidden="true">&times;</span>            </button>          </div>          <div class="modal-body mx-3">            <p class="text-center h4">what do you want to do with this course ? </p>          </div>          <div class="modal-footer d-flex justify-content-center deleteButtonsWrapper">            <button type="button" onclick="window.location.href = '/professorDeleteCourse/{{k.CourseID}}/{{k.GroupID}}'" class="btn btn-danger btnYesClass" id="btnYes{{k}}" data-dismiss="modal">Delete</button>              <button type="button" class="btn btn-primary btnNoClass" onclick="window.location.href = '/professorArchiveCourse/{{k.CourseID}}/{{k.GroupID}}'" id="btn{{k}}" data-dismiss="modal">Archive</button>          </div>        </div>      </div>    </div>                    </td>                      <td>                                    <button type="button" onclick="window.location.href = '/Course/{{k.CourseID}}/{{k.GroupID}}'" class="btn btn-round btn-simple btn-icon">                                        <i class="now-ui-icons arrows-1_minimal-right"></i>                                    </button>                      </td>                  </tr>                 {% endif %}                {% endfor %}                </tbody>                                    </table>                                </div>                            </div>                        </div>                    </div>                </div>            </div><!--Modal: modalConfirmDelete-->{% endblock %}<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>

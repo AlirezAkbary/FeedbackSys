@@ -40,8 +40,10 @@ def professorDeleteCourse_view(request, cid, gid):
     course = Course.objects.filter(
         Q(CourseID=cid, GroupID=gid)
     )
+    print(len(course))
     print(id)
     print(cid)
+    print(gid)
 
     course[0].delete()
     context = {

@@ -22,12 +22,24 @@ def AddCourse(request):
         CourseForm = Course(CourseID=int(post_dict['CourseID'][0]))
         CourseForm.GroupID = int(post_dict['GroupID'][0])
         CourseForm.Name = post_dict['Name'][0]
-        CourseForm.save()
 
+        new_professors = post_dict['new']
+        existing = []
+        print(Professor.objects.all())
+
+        for i in new_professors:
+            if i != '':
+                prof = Professor.objects.filter(
+                    Q(ProfID=int(i))
+                )
+                if not prof:
+                    course_form = CourseCreateForm()
+                    return render(request, 'course/new_form.html', {'course_form': course_form, 'b': 0})
+
+        CourseForm.save()
         self_user = Professor.objects.get(ProfID=int(request.user.username))
         CourseForm.Professor.add(self_user)
 
-        new_professors = post_dict['new']
 
         for i in new_professors:
             if i != '':

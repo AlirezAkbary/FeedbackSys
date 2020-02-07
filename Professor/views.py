@@ -9,9 +9,13 @@ from django.db.models import Q
 @login_required
 def professor_view(request, id):
     obj = Professor.objects.get(ProfID=id)
-
+    notif_num = 0
+    for i in obj.course_set.all():
+        for j in i.not_verified_students.all():
+            notif_num += 1
     context = {
-        "object" : obj
+        "object" : obj,
+        "n" : notif_num
     }
     return render(request, "professor/New_HomeProfPage.html", context)
 
@@ -27,10 +31,15 @@ def professor_view(request, id):
 @login_required
 def archiveCourseProfessor_view(request, id):
     obj = Professor.objects.get(ProfID=id)
+    notif_num = 0
+    for i in obj.course_set.all():
+        for j in i.not_verified_students.all():
+            notif_num += 1
 
 
     context = {
-        "object" : obj
+        "object" : obj,
+        "n": notif_num
     }
     return render(request, "professor/archiveCourseProfPage.html", context)
 @login_required
@@ -66,8 +75,13 @@ def professorArchiveCourse_view(request, cid, gid):
 
 def professor_notifications(request, id):
     prof = Professor.objects.get(ProfID=id)
+    notif_num = 0
+    for i in prof.course_set.all():
+        for j in i.not_verified_students.all():
+            notif_num += 1
     context = {
-        "object": prof
+        "object": prof,
+        "n": notif_num
     }
     return render(request, "professor/notifs.html", context)
 

@@ -8,9 +8,6 @@
         Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
     -->
             <div class="logo">
-                <a href="http://www.creative-tim.com" class="simple-text logo-mini">
-                    CT
-                </a>
                 <a href="http://www.creative-tim.com" class="simple-text logo-normal">
                     {{object.FirstName}}
                     {{object.LastName}}
@@ -33,22 +30,18 @@
                      <li>
                         <a onclick="window.location.href= '/notifications/{{user.username}}'">
                             <i class="now-ui-icons ui-1_bell-53"></i>
-                            <p>Notifications</p>
+                            <p>Notifications &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp  &nbsp &nbsp &nbsp <b>{{n}}</b></p>
+
                         </a>
                     </li>
                     <li>
-                        <a onclick="window.location.href= '/CourseForm/'">
+                        <a onclick="window.location.href= '/CourseForm/{{user.username}}'">
                             <i class="now-ui-icons location_map-big"></i>
                             <p>Add a Course</p>
                         </a>
                     </li>
-                    <li>
-                        <a href="../notifications.html">
-                            <i class="now-ui-icons ui-1_bell-53"></i>
-                            <p>Edit Courses</p>
-                        </a>
-                    </li>
                 </ul>
+
             </div>
         </div>
 {% endblock %}

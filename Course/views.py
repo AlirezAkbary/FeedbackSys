@@ -14,10 +14,19 @@ from Question.forms import MultipleChoiceForm, LongAnswerForm
 from Question.models import MultipleChoiceQuestion, Question, Choice, LongAnswerQuestion
 
 @login_required
-def AddCourse(request):
-    if request.method == "POST":### Need Checks for wrong inputs
+def AddCourse(request, id):
+    u = Professor.objects.filter(
+        Q(ProfID=id)
+    )
+    notif_num = 0
+    for i in u[0].course_set.all():
+        for j in i.not_verified_students.all():
+            notif_num += 1
 
+    if request.method == "POST":### Need Checks for wrong inputs
         post_dict = dict(request.POST.lists())
+
+
 
         CourseForm = Course(CourseID=int(post_dict['CourseID'][0]))
         CourseForm.GroupID = int(post_dict['GroupID'][0])
@@ -34,7 +43,7 @@ def AddCourse(request):
                 )
                 if not prof:
                     course_form = CourseCreateForm()
-                    return render(request, 'course/new_form.html', {'course_form': course_form, 'b': 0})
+                    return render(request, 'course/new_form.html', {'course_form': course_form, 'u': u[0], 'n' : notif_num})
 
         CourseForm.save()
         self_user = Professor.objects.get(ProfID=int(request.user.username))
@@ -49,7 +58,7 @@ def AddCourse(request):
         return HttpResponseRedirect(reverse('professor', kwargs={'id':int(request.user.username)}))
     else:
         course_form = CourseCreateForm()
-    return render(request, 'course/new_form.html', {'course_form':course_form})
+    return render(request, 'course/new_form.html', {'course_form':course_form, 'u': u[0],  'n' : notif_num})
 # Create your views here.
 
 @login_required

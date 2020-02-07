@@ -54,7 +54,7 @@ urlpatterns = [
 
 path('archiveCourseStudent/<int:id>', archiveCourseStudent_view, name='ArchivedCourseStudent'),
 
-    path('CourseForm/', AddCourse, name='addcourseform'),
+    path('CourseForm/<int:id>', AddCourse, name='addcourseform'),
     path('Course/<int:cid>/<int:gid>', courseHome,name="courseHome"),
 
     path('Verification/<int:id>', verification, name='verification'),

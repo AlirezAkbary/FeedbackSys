@@ -16,6 +16,7 @@ import datetime
 
 @login_required
 def AddCourse(request, id):
+
     u = Professor.objects.filter(
         Q(ProfID=id)
     )
@@ -44,7 +45,7 @@ def AddCourse(request, id):
                 )
                 if not prof:
                     course_form = CourseCreateForm()
-                    return render(request, 'course/new_form.html', {'course_form': course_form, 'u': u[0], 'n' : notif_num})
+                    return render(request, 'course/new_form.html', {'course_form': course_form, 'u': u[0], 'n' : notif_num, 'flag':1})
 
         CourseForm.save()
         self_user = Professor.objects.get(ProfID=int(request.user.username))
@@ -59,7 +60,7 @@ def AddCourse(request, id):
         return HttpResponseRedirect(reverse('professor', kwargs={'id':int(request.user.username)}))
     else:
         course_form = CourseCreateForm()
-    return render(request, 'course/new_form.html', {'course_form':course_form, 'u': u[0],  'n' : notif_num})
+    return render(request, 'course/new_form.html', {'course_form':course_form, 'u': u[0],  'n' : notif_num, 'flag':0})
 # Create your views here.
 
 @login_required
@@ -170,8 +171,10 @@ def courseHomeProfView(request, cid, gid):
 
     print("hey")
     print(len(the_course.Questions.all()))
+
     if len(the_course.Questions.all()) == 0:
         context['questions'], context['cid'], context['gid'] = questions, cid, gid
+        context['search_flag'] = 0
         return render(request, 'professor/ProfessorCourseView.html', context)
     else:
         question_to_show = the_course.Questions.all()[0]
@@ -184,15 +187,26 @@ def courseHomeStudentView(request, cid, gid):
     context = {}
     context['course'] = the_course
     questions = Question.objects.all()
-    context['questions'], context['cid'], context['gid'] = questions, cid, gid
-    return render(request, 'student/StudentCourseView.html', context)
+
+    if len(the_course.Questions.all()) == 0:
+        context['questions'], context['cid'], context['gid'] = questions, cid, gid
+        return render(request, 'student/StudentCourseView.html', context)
+    else:
+        question_to_show = the_course.Questions.all()[0]
+        return HttpResponseRedirect(reverse('general_question', kwargs={'cid': cid, 'gid': gid, 'qid':question_to_show.id}))
 
 def StudentCourseList_view(request, cid, gid):
     the_professor = Professor.objects.get(ProfID=request.user.username)
+    n_num = 0
+    for i in the_professor.course_set.all():
+        for j in i.not_verified_students.all():
+            n_num += 1
+
     the_course = Course.objects.get(CourseID=cid, GroupID=gid)
     context = {}
     context['course'] = the_course
     context['professor'] = the_professor
+    context['n'] = n_num
     return render(request, 'professor/StudentListCoursePage.html', context)
 
 def AddMultipleChoiceQuestion(request, cid, gid):
@@ -206,6 +220,7 @@ def AddMultipleChoiceQuestion(request, cid, gid):
         created_question = MultipleChoiceQuestion(title=post_dict['title'][0])
         created_question.Date = datetime.datetime.now()
         created_question.q_type = 'M'
+        created_question.subject = post_dict['subject'][0]
         created_question.save()
 
         choices = post_dict['new']

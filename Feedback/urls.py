@@ -63,6 +63,10 @@ urlpatterns = [
 
     path('Course/<int:cid>/<int:gid>/AddLongAnswerQ', AddLongAnswerQuestion, name='LongAnswerQ'),
 
+    path('QuestionSearch/<int:cid>/<int:gid>', question_search),
+
+
+
     path('Course/<int:cid>/<int:gid>/Question/<int:qid>', question_view_general, name='general_question'),
     url(r'^logout/$', user_logout, name='logout')
 ]

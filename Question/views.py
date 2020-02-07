@@ -168,3 +168,23 @@ def long_question_view_professor(request, cid, gid, qid):
 
     return render(request, 'professor/QuestionLongProfessorPage.html', context)
 
+
+
+def question_search(request, cid, gid):
+    context = {}
+    the_course = Course.objects.get(CourseID=cid, GroupID=gid)
+    context['course'] = the_course
+    query = request.GET.get('q')
+
+    the_course = Course.objects.filter(
+        Q(CourseID=cid, GroupID=gid)
+    )
+    object_list = the_course[0].Questions.all().filter(
+        Q(subject__icontains=query)
+    )
+    context['object_list'] = object_list
+    context['search_flag'] = 1
+    context['cid'], context['gid'] = cid, gid
+    return render(request, "professor/ProfessorCourseView.html", context)
+
+

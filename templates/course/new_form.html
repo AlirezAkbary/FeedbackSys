@@ -63,6 +63,10 @@
                                 <h4 class="card-title"> Add course</h4>
                             </div>
                             <div class="card-body">
+                                {% if flag %}
+                                <p><font color="red">TThe Professor doesn't exist</font></p>
+
+                                {% endif %}
                                 <form action="{{request.path}}" method="post" id="form1">
                                     {% csrf_token %}
 
@@ -70,7 +74,7 @@
                                          {{ course_form.as_p }}
                                         <div class="element-wrapper">
                                             <div class="row" style="display: none">
-                                                <label >Another Choice</label>
+                                                <label >Add Another Professor ID</label>
                                                 <input name="new" type="text" class="form-control" placeholder="New Choice..."/>
                                                 <button type="button" onclick="deleterow()" class="btn btn-round btn-default btn-simple btn-icon">
                                                     <i class="now-ui-icons ui-1_simple-delete"></i>
@@ -90,6 +94,7 @@
                                         </button>
                                     </div>
                                 </form>
+
                             </div>
                         </div>
                     </div>

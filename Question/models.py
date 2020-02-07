@@ -9,8 +9,9 @@ class Question(models.Model):
         ('L', 'LongAnswer')
     )
     title = models.TextField(null=False, blank=False) ##Body of Question
-    subject = models.TextField(null=False, blank=False, default="No Default") ## Question appeared in menu
+    subject = models.TextField(null=False, blank=False, default="No Default", max_length=24) ## Question appeared in menu
     q_type = models.CharField(max_length=1, choices=Question_Types, default='M')
+    Date = models.DateTimeField(null=True, blank=False)
 
 
 

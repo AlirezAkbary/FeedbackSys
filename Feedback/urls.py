@@ -51,8 +51,8 @@ urlpatterns = [
     path('archiveCourseProfessor/<int:id>', archiveCourseProfessor_view, name='ArchivedCourseProfessor'),
     path('professorDeleteCourse/<int:cid>/<int:gid>', professorDeleteCourse_view, name='professorDeleteCourse'),
     path('professorArchiveCourse/<int:cid>/<int:gid>', professorArchiveCourse_view, name='professorArchiveCourse'),
-
-path('archiveCourseStudent/<int:id>', archiveCourseStudent_view, name='ArchivedCourseStudent'),
+    path('StudentCourseList/<int:cid>/<int:gid>', StudentCourseList_view, name='StudentCourseList'),
+    path('archiveCourseStudent/<int:id>', archiveCourseStudent_view, name='ArchivedCourseStudent'),
 
     path('CourseForm/', AddCourse, name='addcourseform'),
     path('Course/<int:cid>/<int:gid>', courseHome,name="courseHome"),
@@ -63,7 +63,7 @@ path('archiveCourseStudent/<int:id>', archiveCourseStudent_view, name='ArchivedC
 
     path('Course/<int:cid>/<int:gid>/AddLongAnswerQ', AddLongAnswerQuestion, name='LongAnswerQ'),
 
-    path('Course/<int:cid>/<int:gid>/Question/<int:qid>', question_view_general),
+    path('Course/<int:cid>/<int:gid>/Question/<int:qid>', question_view_general, name='general_question'),
     url(r'^logout/$', user_logout, name='logout')
 ]
 

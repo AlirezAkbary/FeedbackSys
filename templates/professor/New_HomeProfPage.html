@@ -92,6 +92,9 @@
                                             <th>
                                                 Course Page
                                             </th>
+                                            <th>
+                                                Student List
+                                            </th>
                                         </thead>
 
                                         <tbody>
@@ -138,6 +141,11 @@
                     </td>
                       <td>
                                     <button type="button" onclick="window.location.href = '/Course/{{i.CourseID}}/{{i.GroupID}}'" class="btn btn-round btn-simple btn-icon">
+                                        <i class="now-ui-icons arrows-1_minimal-right"></i>
+                                    </button>
+                      </td>
+                      <td>
+                                    <button type="button" onclick="window.location.href = '/StudentCourseList/{{i.CourseID}}/{{i.GroupID}}'" class="btn btn-round btn-simple btn-icon">
                                         <i class="now-ui-icons arrows-1_minimal-right"></i>
                                     </button>
                       </td>

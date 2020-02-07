@@ -21,7 +21,7 @@ class MultipleChoiceForm(forms.ModelForm):
         fields = ('title', 'subject')
         widgets = {
             'title' : forms.TextInput(attrs={'class':'form-control'}),
-            'subject': forms.TextInput(attrs={'class': 'form-control'})
+            'subject': forms.TextInput(attrs={'class': 'form-control', 'maxlength' : '24'})
         }
 
 

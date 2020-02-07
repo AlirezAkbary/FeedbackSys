@@ -12,6 +12,7 @@ from django.urls import reverse
 from django.db.models import Q
 from Question.forms import MultipleChoiceForm, LongAnswerForm
 from Question.models import MultipleChoiceQuestion, Question, Choice, LongAnswerQuestion
+import datetime
 
 @login_required
 def AddCourse(request):
@@ -157,8 +158,16 @@ def courseHomeProfView(request, cid, gid):
     context = {}
     context['course'] = the_course
     questions = Question.objects.all()
-    context['questions'], context['cid'], context['gid'] = questions, cid, gid
-    return render(request, 'professor/ProfessorCourseView.html', context)
+
+    print("hey")
+    print(len(the_course.Questions.all()))
+    if len(the_course.Questions.all()) == 0:
+        context['questions'], context['cid'], context['gid'] = questions, cid, gid
+        return render(request, 'professor/ProfessorCourseView.html', context)
+    else:
+        question_to_show = the_course.Questions.all()[0]
+        return HttpResponseRedirect(reverse('general_question', kwargs={'cid': cid, 'gid': gid, 'qid':question_to_show.id}))
+
 
 
 def courseHomeStudentView(request, cid, gid):
@@ -169,6 +178,13 @@ def courseHomeStudentView(request, cid, gid):
     context['questions'], context['cid'], context['gid'] = questions, cid, gid
     return render(request, 'student/StudentCourseView.html', context)
 
+def StudentCourseList_view(request, cid, gid):
+    the_professor = Professor.objects.get(ProfID=request.user.username)
+    the_course = Course.objects.get(CourseID=cid, GroupID=gid)
+    context = {}
+    context['course'] = the_course
+    context['professor'] = the_professor
+    return render(request, 'professor/StudentListCoursePage.html', context)
 
 def AddMultipleChoiceQuestion(request, cid, gid):
     if request.method == "POST":
@@ -179,8 +195,9 @@ def AddMultipleChoiceQuestion(request, cid, gid):
         post_dict = dict(request.POST.lists())
 
         created_question = MultipleChoiceQuestion(title=post_dict['title'][0])
-        created_question.save()
+        created_question.Date = datetime.datetime.now()
         created_question.q_type = 'M'
+        created_question.save()
 
         choices = post_dict['new']
         for i in choices:
@@ -207,6 +224,7 @@ def AddLongAnswerQuestion(request, cid, gid):
         created_question = LongAnswerQuestion(title=post_dict['title'][0])
 
         created_question.q_type = 'L'
+        created_question.Date = datetime.datetime.now()
         created_question.subject = post_dict['subject'][0]
 
         created_question.save()

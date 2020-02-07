@@ -1,0 +1,46 @@
+{% extends "question/QuestionPageBaseProf.html" %}
+{% load static %}
+
+
+{% block body %}
+<div class="content">
+                <div class="row">
+                  <div class="col-md-8">
+                    <div class="card card-tasks">
+                      <div class="card-header">
+                        <h4 class="card-title">{{the_question.title}}</h4>
+                      </div>
+                      <div class="card-body">
+
+
+                            {% for i in the_question.choices.all %}
+  <div class="side">
+    <div>{{i.text}}</div>
+  </div>
+  <div class="middle">
+    <div class="bar-container">
+      <div style="width: {% widthratio i.count total_count 1 %}%; height: 18px; background-color: #4CAF50;"></div>
+    </div>
+  </div>
+  <div class="side right">
+    <div>{%widthratio i.count total_count 1 %}</div>
+  </div>
+
+
+{% endfor %}
+
+                      </div>
+                      <div class="card-footer">
+                        <hr>
+                        <div class="stats">
+                          <i class="now-ui-icons loader_refresh spin"></i> Updated 3 minutes ago
+                        </div>
+                      </div>
+                  </div>
+                  </div>
+                </div>
+</div>
+
+
+
+{% endblock %}

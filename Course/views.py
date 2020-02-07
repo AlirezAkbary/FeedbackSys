@@ -10,8 +10,8 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.db.models import Q
-from Question.forms import MultipleChoiceForm
-from Question.models import MultipleChoiceQuestion, Question, Choice
+from Question.forms import MultipleChoiceForm, LongAnswerForm
+from Question.models import MultipleChoiceQuestion, Question, Choice, LongAnswerQuestion
 
 @login_required
 def AddCourse(request):
@@ -148,6 +148,7 @@ def courseHomeProfView(request, cid, gid):
     context['questions'], context['cid'], context['gid'] = questions, cid, gid
     return render(request, 'professor/ProfessorCourseView.html', context)
 
+
 def courseHomeStudentView(request, cid, gid):
     the_course = Course.objects.get(CourseID=cid, GroupID=gid)
     context = {}
@@ -155,7 +156,6 @@ def courseHomeStudentView(request, cid, gid):
     questions = Question.objects.all()
     context['questions'], context['cid'], context['gid'] = questions, cid, gid
     return render(request, 'student/StudentCourseView.html', context)
-    pass
 
 
 def AddMultipleChoiceQuestion(request, cid, gid):
@@ -184,3 +184,26 @@ def AddMultipleChoiceQuestion(request, cid, gid):
     the_course = Course.objects.get(CourseID=cid, GroupID=gid)
     questions = Question.objects.all()
     return render(request, 'course/AddMultChoiceQ.html', {'question_form': question_form, 'course':the_course, 'questions':questions})
+
+
+def AddLongAnswerQuestion(request, cid, gid):
+    if request.method == "POST":
+        print("------------------------------------------------")
+        print(dict(request.POST.lists()))
+
+        post_dict = dict(request.POST.lists())
+        created_question = LongAnswerQuestion(title=post_dict['title'][0])
+
+        created_question.q_type = 'L'
+        created_question.subject = post_dict['subject'][0]
+
+        created_question.save()
+        the_course = Course.objects.get(CourseID=cid, GroupID=gid)
+        the_course.Questions.add(created_question)
+        return HttpResponseRedirect(reverse('LongAnswerQ', kwargs={'cid': cid, 'gid': gid}))
+    else:
+        question_form = LongAnswerForm()
+
+    the_course = Course.objects.get(CourseID=cid, GroupID=gid)
+    questions = Question.objects.all()
+    return render(request, 'course/AddLongAnswerQ.html', {'question_form': question_form, 'course':the_course, 'questions':questions})

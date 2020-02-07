@@ -59,6 +59,9 @@ def multiple_question_view_student(request, cid, gid, qid):
 
         the_student = Student.objects.get(StudentID=request.user.username)
         the_student.SelectedChoices.add(selected_choice)
+        print(selected_choice.count)
+        Choice.objects.filter(Q(id=post_dict['question'][0])).update(count=selected_choice.count + 1)
+        print(selected_choice.count)
 
     answer_status = check_choice_status(request, qid)
     context['answer_status'] = answer_status
@@ -68,7 +71,6 @@ def multiple_question_view_student(request, cid, gid, qid):
     context['the_question'] = the_question
 
     return render(request, 'student/QuestionMultipleStudentPage.html', context)
-
 
 
 def check_answer_status(request, qid):
@@ -89,7 +91,6 @@ def check_answer_status(request, qid):
                 return i.id
 
     return -1
-
 
 
 def long_question_view_student(request, cid, gid, qid):
@@ -119,11 +120,51 @@ def long_question_view_student(request, cid, gid, qid):
     if answer_status != -1:
         context['answer'] = Answer.objects.get(id=answer_status)
 
-
     return render(request, 'student/QuestionLongStudentPage.html', context)
 
 
 
-
 def question_view_professsor(request, cid, gid, qid):
-    pass
+    the_question = Question.objects.get(id=qid)
+    if the_question.q_type == 'M':
+        return multiple_question_view_professor(request, cid, gid, qid)
+    return long_question_view_professor(request, cid, gid, qid)
+
+
+def multiple_question_view_professor(request, cid, gid, qid):
+    context = {}
+    questions = Question.objects.all()
+    context['questions'] = questions
+    context['qid'], context['cid'], context['gid'] = qid, cid, gid
+
+    the_course = Course.objects.get(CourseID=cid, GroupID=gid)
+    context['course'] = the_course
+
+    the_question = MultipleChoiceQuestion.objects.filter(Q(id=qid))
+    context['the_question'] = the_question[0]
+
+    sum_of_count = 0
+    for i in the_question[0].choices.all():
+        sum_of_count += i.count
+    if sum_of_count != 0:
+        context['total_count'] = sum_of_count
+    else:
+        context['total_count'] = 1
+    context['total_count'] /= 100
+    return render(request, 'professor/QuestionMultipleProfessorPage.html', context)
+
+
+def long_question_view_professor(request, cid, gid, qid):
+    context = {}
+    questions = Question.objects.all()
+    context['questions'] = questions
+    context['qid'], context['cid'], context['gid'] = qid, cid, gid
+
+    the_course = Course.objects.get(CourseID=cid, GroupID=gid)
+    context['course'] = the_course
+
+    the_question = LongAnswerQuestion.objects.filter(Q(id=qid))
+    context['the_question'] = the_question[0]
+
+    return render(request, 'professor/QuestionLongProfessorPage.html', context)
+

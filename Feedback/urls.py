@@ -60,6 +60,8 @@ urlpatterns = [
 
     path('Course/<int:cid>/<int:gid>/AddMultChoiceQ', AddMultipleChoiceQuestion, name='MultChoiceQ'),
 
+    path('Course/<int:cid>/<int:gid>/AddLongAnswerQ', AddLongAnswerQuestion, name='LongAnswerQ'),
+
     path('Course/<int:cid>/<int:gid>/Question/<int:qid>', question_view_general),
     url(r'^logout/$', user_logout, name='logout')
 ]

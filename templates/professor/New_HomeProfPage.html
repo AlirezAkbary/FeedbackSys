@@ -109,10 +109,10 @@
                     <td>{{i.Status}}</td>
                     <td>
                             <div class="text-center">
-        <button class="btn btn-danger btn-sm btn-rounded buttonDelete" data-toggle="modal" data-target="#modalDelete"
+        <button class="btn btn-danger btn-sm btn-rounded buttonDelete" data-toggle="modal" data-target="#modalDelete{{i.CourseID}}{{i.GroupID}}"
         >Remove<i class="fas fa-times ml-1"></i></button>
     </div>
-                        <div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="modalDelete"
+                        <div class="modal fade" id="modalDelete{{i.CourseID}}{{i.GroupID}}" tabindex="-1" role="dialog" aria-labelledby="modalDelete"
       aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">

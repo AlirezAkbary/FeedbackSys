@@ -117,6 +117,7 @@ def user_logout(request):
     logout(request)
     return HttpResponseRedirect(reverse('home'))
 
+
 def user_login(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -147,6 +148,7 @@ def user_login(request):
         else:
             print("Someone tried to login and failed.")
             print("They used username: {} and password: {}".format(username, password))
+
             return HttpResponse("Invalid login details given")
     else:
         return render(request, 'index.html', {})

@@ -65,6 +65,8 @@ urlpatterns = [
 
     path('QuestionSearch/<int:cid>/<int:gid>', question_search),
 
+    path('QuestionSearchStudent/<int:cid>/<int:gid>', question_search_student),
+
 
 
     path('Course/<int:cid>/<int:gid>/Question/<int:qid>', question_view_general, name='general_question'),

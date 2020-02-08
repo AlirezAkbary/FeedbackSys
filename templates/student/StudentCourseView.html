@@ -11,9 +11,9 @@
 
 
 
-                <form>
+                <form  action="/QuestionSearchStudent/{{cid}}/{{gid}}" method="get">
                     <div class="input-group no-border">
-                        <input type="text" value="" class="form-control" placeholder="Search Questions...">
+                        <input name="q" type="text" value="" class="form-control" placeholder="Search Questions...">
                             <span class="input-group-addon">
                                 <i class="now-ui-icons ui-1_zoom-bold"></i>
                             </span>
@@ -30,14 +30,26 @@
                             <h3>Questions</h3>
                         </a>
                     </li>
+
+                    {% if search_flag %}
+                    {% for i in object_list %}
+                                        <li>
+                        <a href="/Course/{{cid}}/{{gid}}/Question/{{i.id}}">
+                            <i class="now-ui-icons design_bullet-list-67"></i>
+                            <p>{{i.subject}}</p>
+                        </a>
+                    </li>
+                    {% endfor %}
+                    {% else %}
                     {% for i in course.Questions.all %}
                     <li>
                         <a href="/Course/{{cid}}/{{gid}}/Question/{{i.id}}">
                             <i class="now-ui-icons design_bullet-list-67"></i>
-                            <p>{{i.title}}</p>
+                            <p>{{i.subject}}</p>
                         </a>
                     </li>
                     {% endfor %}
+                    {% endif %}
 
                 </ul>
             </div>
@@ -54,11 +66,13 @@
 <div class="content">
                 <div class="row">
                     <div class="col-md-8">
+                        {% if search_flag == 0 %}
                         <div class="card">
                             <div class="card-header">
                                 <h5 class="title">No Question Added Yet.</h5>
                             </div>
                         </div>
+                        {% endif %}
                     </div>
 
                 </div>

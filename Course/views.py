@@ -190,6 +190,7 @@ def courseHomeStudentView(request, cid, gid):
 
     if len(the_course.Questions.all()) == 0:
         context['questions'], context['cid'], context['gid'] = questions, cid, gid
+        context['search_flag'] = 0
         return render(request, 'student/StudentCourseView.html', context)
     else:
         question_to_show = the_course.Questions.all()[0]
